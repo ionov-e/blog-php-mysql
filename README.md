@@ -5,8 +5,10 @@
 1. Через терминал зайти в пустую папку, куда планируется разместить проект
 2. `git clone https://github.com/ionov-e/blog-php-mysql.git .` или `git clone git@github.com:ionov-e/blog-php-mysql.git .`
 3. `composer install`. Если composer на системе не установлен - добиваемся исполнения этой команды другим способом
-4. `docker compose up -d`
-5. Сайт доступен по ссылке: http://localhost:55000/
+4. В корне с папкой скопировать файл **.env.example** как новый файл с названием **.env** (ничего менять не надо)
+5. `sudo chmod -R 777 logs/`
+6. `docker compose up -d`
+7. Сайт доступен по ссылке: http://localhost:55000/
 
 ## Использование
 
