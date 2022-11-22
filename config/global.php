@@ -28,6 +28,7 @@ const SEARCH_KEY_NAME = 'search';
 const ARTICLE_ID_KEY_NAME = 'article_id';
 const REGISTER_KEY_NAME = 'register';
 const LOGIN_KEY_NAME = 'login';
+const PASSWORD_KEY_NAME = 'password';
 const ID_KEY_NAME = 'id';
 const USER_ID_KEY_NAME = 'user_id';
 const TITLE_KEY_NAME = 'title';

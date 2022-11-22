@@ -15,6 +15,8 @@
 </head>
 <body>
 <div class="container mt-5">
+    <?php include_once __DIR__ . "/components/login-register-block.php" ?>
+
     <?= $content ?>
 </div>
 </body>
