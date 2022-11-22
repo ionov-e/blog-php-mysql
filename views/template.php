@@ -1,4 +1,6 @@
-<?php $content = $this->args[0]; ?>
+<?php
+$content = $this->args[0];
+?>
 
 <!doctype html>
 <html lang="ru">
@@ -16,7 +18,7 @@
 <body>
 <div class="container mt-5">
     <?php include_once __DIR__ . "/components/login-register-block.php" ?>
-
+    <?php include_once __DIR__ . "/components/alert-block.php" ?>
     <?= $content ?>
 </div>
 </body>

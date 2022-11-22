@@ -24,14 +24,14 @@ class View
         $this->logger = (new Logger('view'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
-    public static function articleList(array $articles): self
+    public static function articleList(array $articles, string $alertMessage): self
     {
         $view = new self(self::ARTICLE_LIST_PATH, $articles);
 
         $view->logger->debug(__METHOD__ . " has been started");
         $view->logger->debug("'articles' content: " . json_encode($articles));
 
-        return $view->completePageWithinTemplate($view);
+        return $view->completePageWithinTemplate($view, $alertMessage);
     }
 
     public static function articleSingle(array $article): self
@@ -58,8 +58,8 @@ class View
         return $var;
     }
 
-    private function completePageWithinTemplate(string $content): self
+    private function completePageWithinTemplate(string $content, string $alertMessage = ''): self
     {
-        return new self(self::TEMPLATE_PATH, [$content]);
+        return new self(self::TEMPLATE_PATH, [$content, $alertMessage]);
     }
 }

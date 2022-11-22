@@ -2,28 +2,28 @@
 
 namespace App\Controllers;
 
+use App\Interfaces\DbInterface;
 use App\Services\View;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use PDO;
 
 class Article
 {
     private Logger $logger;
 
-    public function __construct(private PDO $pdo)
+    public function __construct(private readonly DbInterface $db)
     {
         $this->logger = (new Logger('view'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
-    public function listAll(): void
+    public function listAll(string $alertMessage = ''): void
     {
         $this->logger->debug(__METHOD__ . " has been started");
 
-        $articles = $this->pdo->query("SELECT * FROM articles")->fetchAll(PDO::FETCH_ASSOC);
+        $articles = $this->db->getArticles();
 
-        echo View::articleList($articles);
+        echo View::articleList($articles, $alertMessage);
     }
 
     public function showById(): void
@@ -32,7 +32,9 @@ class Article
 
         $articleId = $_GET[ARTICLE_ID_KEY_NAME];
 
-        $article = $this->pdo->query("SELECT * FROM articles WHERE id = {$articleId}")->fetchAll(PDO::FETCH_ASSOC);
+        $this->logger->debug("Article ID received: $articleId");
+
+        $article = $this->db->getArticleById($articleId);
 
         echo View::articleSingle($article);
     }

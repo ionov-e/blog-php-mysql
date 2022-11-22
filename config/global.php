@@ -17,7 +17,6 @@ define('MYSQL_ROOT_PASSWORD', $_ENV['MYSQL_ROOT_PASSWORD']);
 define('MYSQL_DATABASE', $_ENV['MYSQL_DATABASE']);
 define('MYSQL_USER', $_ENV['MYSQL_USER']);
 define('MYSQL_PASSWORD', $_ENV['MYSQL_PASSWORD']);
-define('LOG_MIN_LEVEL', $_ENV['LOG_MIN_LEVEL']);
 
 define('PROJECT_DIR', dirname(__DIR__, 1));              // Корневая папка
 
@@ -29,6 +28,7 @@ const ARTICLE_ID_KEY_NAME = 'article_id';
 const REGISTER_KEY_NAME = 'register';
 const LOGIN_KEY_NAME = 'login';
 const PASSWORD_KEY_NAME = 'password';
+const PASSWORD_HASHED_KEY_NAME = 'password_hashed';
 const ID_KEY_NAME = 'id';
 const USER_ID_KEY_NAME = 'user_id';
 const TITLE_KEY_NAME = 'title';
