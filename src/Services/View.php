@@ -3,10 +3,6 @@
 
 namespace App\Services;
 
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Level;
-use Monolog\Logger;
-
 class View
 {
     private const VIEWS_FOLDER = PROJECT_DIR . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR;
@@ -14,22 +10,19 @@ class View
     private const ARTICLE_LIST_PATH = self::VIEWS_FOLDER . 'article_list.php';
     private const ARTICLE_SINGLE_PATH = self::VIEWS_FOLDER . 'article_single.php';
 
-    private Logger $logger;
-
     private function __construct(
         private readonly string $path,
         private readonly array  $args = []
     )
     {
-        $this->logger = (new Logger('view'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
     public static function articleList(array $articles, string $alertMessage): self
     {
         $view = new self(self::ARTICLE_LIST_PATH, $articles);
 
-        $view->logger->debug(__METHOD__ . " has been started");
-        $view->logger->debug("'articles' content: " . json_encode($articles));
+        Log::debug(__METHOD__ . " has been started");
+        Log::debug("'articles' content: " . json_encode($articles));
 
         return $view->completePageWithinTemplate($view, $alertMessage);
     }
@@ -38,8 +31,8 @@ class View
     {
         $view = new self(self::ARTICLE_SINGLE_PATH, $article);
 
-        $view->logger->debug(__METHOD__ . " has been started");
-        $view->logger->debug("'article' content: " . json_encode($article));
+        Log::debug(__METHOD__ . " has been started");
+        Log::debug("'article' content: " . json_encode($article));
 
         return $view->completePageWithinTemplate($view);
     }
@@ -52,7 +45,7 @@ class View
         ob_end_clean();
 
         if (empty($var)) {
-            $this->logger->critical("Не вышло отрендерить файл: $this->path с аргументами: " . json_encode($this->args, JSON_UNESCAPED_UNICODE));
+            Log::critical("Не вышло отрендерить файл: $this->path с аргументами: " . json_encode($this->args, JSON_UNESCAPED_UNICODE));
         }
 
         return $var;

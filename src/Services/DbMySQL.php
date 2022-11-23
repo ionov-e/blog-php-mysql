@@ -2,16 +2,12 @@
 
 namespace App\Services;
 
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Level;
-use Monolog\Logger;
 use PDO;
 use App\Interfaces\DbInterface;
 
 class DbMySQL implements DbInterface
 {
     private PDO $pdo;
-    private Logger $logger;
 
     public function __construct()
     {
@@ -23,8 +19,6 @@ class DbMySQL implements DbInterface
         } catch (\Throwable $e) {
             throw new \PDOException("Connection failed. Throwable name: '" . $e::class . "'. Message : " . $e->getMessage());
         }
-
-        $this->logger = (new Logger('db'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
     public function getArticles(): array
@@ -49,7 +43,7 @@ class DbMySQL implements DbInterface
 
     public function register(string $login, string $password): int
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::debug(__METHOD__ . " has been started");
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -60,18 +54,18 @@ class DbMySQL implements DbInterface
 
     public function login(string $login, string $password): int
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::debug(__METHOD__ . " has been started");
 
         try {
             $sql = sprintf('SELECT * FROM users WHERE %s = "%s"', LOGIN_KEY_NAME, $login);
             $userRowFromDb = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
 
             if (!$userRowFromDb) {
-                $this->logger->info("User '$login' hasn't been found in DB");
+                Log::info("User '$login' hasn't been found in DB");
                 return DbInterface::LOGIN_NO_SUCH_USER;
             }
 
-            $this->logger->debug("For user '$login' fetched from DB row: " . json_encode($userRowFromDb));
+            Log::debug("For user '$login' fetched from DB row: " . json_encode($userRowFromDb));
 
             if (!password_verify($password, $userRowFromDb[PASSWORD_HASHED_KEY_NAME])) {
                 return DbInterface::LOGIN_PASSWORD_NOT_MATCHED;
@@ -79,7 +73,7 @@ class DbMySQL implements DbInterface
 
             return DbInterface::LOGIN_SUCCESS;
         } catch (\Exception $e) {
-            $this->logger->error("Login Exception: " . json_encode($e->getMessage()));
+            Log::error("Login Exception: " . json_encode($e->getMessage()));
             return DbInterface::LOGIN_EXCEPTION;
         }
     }

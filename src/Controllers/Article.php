@@ -3,23 +3,19 @@
 namespace App\Controllers;
 
 use App\Interfaces\DbInterface;
+use App\Services\Log;
 use App\Services\View;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Level;
-use Monolog\Logger;
 
 class Article
 {
-    private Logger $logger;
 
     public function __construct(private readonly DbInterface $db)
     {
-        $this->logger = (new Logger('view'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
     public function listAll(string $alertMessage = ''): void
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('artList');
 
         $articles = $this->db->getArticles();
 
@@ -28,11 +24,11 @@ class Article
 
     public function showById(): void
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('artShowId');
 
         $articleId = $_GET[ARTICLE_ID_KEY_NAME];
 
-        $this->logger->debug("Article ID received: $articleId");
+        Log::debug("Article ID received: $articleId");
 
         $article = $this->db->getArticleById($articleId);
 
@@ -41,14 +37,14 @@ class Article
 
     public function listFilteredByQuery(): void
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('artListQuery');
 
         #TODO
     }
 
     public function store()
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('artStore');
 
         #TODO
     }

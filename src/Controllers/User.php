@@ -3,25 +3,20 @@
 namespace App\Controllers;
 
 use App\Interfaces\DbInterface;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Level;
-use Monolog\Logger;
+use App\Services\Log;
 
 class User
 {
-    private Logger $logger;
-
     public function __construct(private readonly DbInterface $db)
     {
-        $this->logger = (new Logger('user'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));
     }
 
     public function register(): void
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('reg');
         $login = $_POST[LOGIN_KEY_NAME];
         $password = $_POST[PASSWORD_KEY_NAME];
-        $this->logger->debug("Received: login: '$login', password: '$password'");
+        Log::debug("Received: login: '$login', password: '$password'");
         if ($this->db->register($login, $password)) {
             $alertMessage = "Registered successfully";
         } else {
@@ -32,10 +27,10 @@ class User
 
     public function login(): void
     {
-        $this->logger->debug(__METHOD__ . " has been started");
+        Log::init('login');
         $login = $_POST[LOGIN_KEY_NAME];
         $password = $_POST[PASSWORD_KEY_NAME];
-        $this->logger->debug("Received: login: '$login', password: '$password'");
+        Log::debug("Received: login: '$login', password: '$password'");
 
 
         $loginStatus = $this->db->login($login, $password);
@@ -54,7 +49,7 @@ class User
                 $alertMessage = "There was a backend error";
                 break;
             default:
-                $this->logger->critical("Unforeseen login status: $loginStatus");
+                Log::critical("Unforeseen login status: $loginStatus");
                 $alertMessage = "There was a backend error";
         }
 
