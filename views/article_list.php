@@ -1,6 +1,6 @@
-<h1 class="text-center">Таблица со статьями</h1>
+<h1 class="text-center">Articles table</h1>
 
-<h2 class="pt-5 text-center">Количество статей: <?= count($this->args) ?></h2>
+<h2 class="pt-5 text-center">Articles count: <?= count($this->args) ?></h2>
 
 <table class="table table-hover">
     <thead>
