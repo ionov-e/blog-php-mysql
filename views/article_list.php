@@ -26,10 +26,12 @@
 <script>
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {
-        row.addEventListener('click', () => {
-            let rowId = row.children[0].innerHTML;
-            console.log(window.location.href = "/?<?= ARTICLE_ID_KEY_NAME ?>=" + rowId);
-        })
+        if (row.parentElement.tagName !== 'THEAD') {
+            row.addEventListener('click', () => {
+                let rowId = row.children[0].innerHTML;
+                console.log(window.location.href = "/?<?= ARTICLE_ID_KEY_NAME ?>=" + rowId);
+            })
+        }
     })
 </script>
 
