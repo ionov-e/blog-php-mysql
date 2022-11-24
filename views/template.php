@@ -17,7 +17,7 @@ $content = $this->args[0];
 </head>
 <body>
 <div class="container mt-5">
-    <?php include_once __DIR__ . "/components/login-register-block.php" ?>
+    <?php include_once __DIR__ . "/components/user-control.php" ?>
     <?php include_once __DIR__ . "/components/alert-block.php" ?>
     <?= $content ?>
 </div>

@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         (new Controllers\User(new DbMySQL()))->register();
     } elseif (!empty($_POST[LOGIN_KEY_NAME])) {
         (new Controllers\User(new DbMySQL()))->login();
-    } elseif (!empty($_POST[TITLE_KEY_NAME])) {
+    } elseif (!empty($_POST[LOGOUT_KEY_NAME])) {
+        (new Controllers\User(new DbMySQL()))->logout();
+    }  elseif (!empty($_POST[TITLE_KEY_NAME])) {
         (new Controllers\Article(new DbMySQL()))->store();
     } else {
         $logger = (new Logger('weird_user'))->pushHandler(new RotatingFileHandler(LOG_PATH, LOG_MAX_DAYS, Level::Debug));

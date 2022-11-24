@@ -18,6 +18,7 @@ class User
         $password = $_POST[PASSWORD_KEY_NAME];
         Log::debug("Received: login: '$login', password: '$password'");
         if ($this->db->register($login, $password)) {
+            $_SESSION[AUTHENTICATED_USER_ID] = $this->db->getUserID($login);
             $alertMessage = "Registered successfully";
         } else {
             $alertMessage = "Registering failed. Try again";
@@ -28,15 +29,16 @@ class User
     public function login(): void
     {
         Log::init('login');
+        unset($_SESSION[AUTHENTICATED_USER_ID]);
         $login = $_POST[LOGIN_KEY_NAME];
         $password = $_POST[PASSWORD_KEY_NAME];
         Log::debug("Received: login: '$login', password: '$password'");
-
 
         $loginStatus = $this->db->login($login, $password);
 
         switch ($loginStatus) {
             case DbInterface::LOGIN_SUCCESS:
+                $_SESSION[AUTHENTICATED_USER_ID] = $this->db->getUserID($login);
                 $alertMessage = "Logged in successfully";
                 break;
             case DbInterface::LOGIN_PASSWORD_NOT_MATCHED:
@@ -54,5 +56,12 @@ class User
         }
 
         (new Article($this->db))->listAll($alertMessage);
+    }
+
+    public function logout(): void
+    {
+        Log::init('logout');
+        unset($_SESSION[AUTHENTICATED_USER_ID]);
+        (new Article($this->db))->listAll('You have been logged out');
     }
 }

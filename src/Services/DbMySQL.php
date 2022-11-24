@@ -60,19 +60,16 @@ class DbMySQL implements DbInterface
         Log::debug(__METHOD__ . " has been started");
 
         try {
-            $sql = sprintf('SELECT * FROM users WHERE %s = :login', LOGIN_KEY_NAME);
-            $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-            $sth->execute(['login' => $login]);
-            $userRowFromDb = $sth->fetch(PDO::FETCH_ASSOC);
+            $userArrayFromDb = $this->getUserRow($login);
 
-            if (!$userRowFromDb) {
+            if (!$userArrayFromDb) {
                 Log::info("User '$login' hasn't been found in DB");
                 return DbInterface::LOGIN_NO_SUCH_USER;
             }
 
-            Log::debug("For user '$login' fetched from DB row: " . json_encode($userRowFromDb));
+            Log::debug("For user '$login' fetched from DB row: " . json_encode($userArrayFromDb));
 
-            if (!password_verify($password, $userRowFromDb[PASSWORD_HASHED_KEY_NAME])) {
+            if (!password_verify($password, $userArrayFromDb[PASSWORD_HASHED_KEY_NAME])) {
                 return DbInterface::LOGIN_PASSWORD_NOT_MATCHED;
             }
 
@@ -81,5 +78,25 @@ class DbMySQL implements DbInterface
             Log::error("Login Exception: " . json_encode($e->getMessage()));
             return DbInterface::LOGIN_EXCEPTION;
         }
+    }
+
+    public function getUserID(string $login): int
+    {
+        $userArrayFromDb = $this->getUserRow($login);
+
+        if (empty($userId = $userArrayFromDb[ID_KEY_NAME])) {
+            Log::critical("Couldn't find ID for user '$login'");
+            return 0;
+        }
+
+        return (int)$userId;
+    }
+
+    private function getUserRow(string $login): array|false
+    {
+        $sql = sprintf('SELECT * FROM users WHERE %s = :login', LOGIN_KEY_NAME);
+        $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        $sth->execute(['login' => $login]);
+        return $sth->fetch(PDO::FETCH_ASSOC);
     }
 }

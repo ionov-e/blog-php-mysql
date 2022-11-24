@@ -27,12 +27,16 @@ const SEARCH_KEY_NAME = 'search';
 const ARTICLE_ID_KEY_NAME = 'article_id';
 const REGISTER_KEY_NAME = 'register';
 const LOGIN_KEY_NAME = 'login';
+const LOGOUT_KEY_NAME = 'logout';
 const PASSWORD_KEY_NAME = 'password';
 const PASSWORD_HASHED_KEY_NAME = 'password_hashed';
 const ID_KEY_NAME = 'id';
 const USER_ID_KEY_NAME = 'user_id';
 const TITLE_KEY_NAME = 'title';
 const CONTENT_KEY_NAME = 'content';
+const AUTHENTICATED_USER_ID = 'auth_user_id';
 
 // Установка часового пояса как в примере (где бы не выполнялся скрипт - одинаковое время)
 date_default_timezone_set('Europe/Moscow');
+
+session_start();
