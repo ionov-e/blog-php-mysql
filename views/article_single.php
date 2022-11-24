@@ -5,3 +5,7 @@
 <h2 class="pt-5 text-center"><?= $article[TITLE_KEY_NAME] ?></h2>
 
 <p><?= $article[CONTENT_KEY_NAME] ?></p>
+
+<div class="d-flex justify-content-center">
+    <a href="/" class="btn btn-primary btn-lg">Back to article list</a>
+</div>
