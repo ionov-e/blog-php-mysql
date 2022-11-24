@@ -33,7 +33,10 @@ class DbMySQL implements DbInterface
 
     public function getArticleById(int $articleId): array
     {
-        return $this->pdo->query("SELECT * FROM articles WHERE id = {$articleId}")->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM articles WHERE id = :articleId";
+        $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        $sth->execute(['articleId' => $articleId]);
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function storeArticle(int $articleId): bool
@@ -57,8 +60,10 @@ class DbMySQL implements DbInterface
         Log::debug(__METHOD__ . " has been started");
 
         try {
-            $sql = sprintf('SELECT * FROM users WHERE %s = "%s"', LOGIN_KEY_NAME, $login);
-            $userRowFromDb = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+            $sql = sprintf('SELECT * FROM users WHERE %s = :login', LOGIN_KEY_NAME);
+            $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+            $sth->execute(['login' => $login]);
+            $userRowFromDb = $sth->fetch(PDO::FETCH_ASSOC);
 
             if (!$userRowFromDb) {
                 Log::info("User '$login' hasn't been found in DB");
