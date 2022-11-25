@@ -35,6 +35,7 @@ const USER_ID_KEY_NAME = 'user_id';
 const TITLE_KEY_NAME = 'title';
 const CONTENT_KEY_NAME = 'content';
 const AUTHENTICATED_USER_ID = 'auth_user_id';
+const NEW_ARTICLE_KEY_NAME = 'new_article';
 
 // Установка часового пояса как в примере (где бы не выполнялся скрипт - одинаковое время)
 date_default_timezone_set('Europe/Moscow');

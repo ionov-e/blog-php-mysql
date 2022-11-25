@@ -6,6 +6,4 @@
 
 <p><?= $article[CONTENT_KEY_NAME] ?></p>
 
-<div class="d-flex justify-content-center">
-    <a href="/" class="btn btn-primary btn-lg">Back to article list</a>
-</div>
+<?php include_once __DIR__ . "/components/back-to-list-block.php" ?>

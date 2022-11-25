@@ -9,6 +9,7 @@ class View
     private const TEMPLATE_PATH = self::VIEWS_FOLDER . 'template.php';
     private const ARTICLE_LIST_PATH = self::VIEWS_FOLDER . 'article_list.php';
     private const ARTICLE_SINGLE_PATH = self::VIEWS_FOLDER . 'article_single.php';
+    private const ARTICLE_CREATE_FORM = self::VIEWS_FOLDER . 'article_create_form.php';
 
     private function __construct(
         private readonly string $path,
@@ -33,6 +34,15 @@ class View
 
         Log::debug(__METHOD__ . " has been started");
         Log::debug("'article' content: " . json_encode($article));
+
+        return $view->completePageWithinTemplate($view);
+    }
+
+    public static function articleCreateFrom(): self
+    {
+        $view = new self(self::ARTICLE_CREATE_FORM);
+
+        Log::debug(__METHOD__ . " has been started");
 
         return $view->completePageWithinTemplate($view);
     }

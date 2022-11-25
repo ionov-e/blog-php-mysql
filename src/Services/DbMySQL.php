@@ -39,10 +39,6 @@ class DbMySQL implements DbInterface
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function storeArticle(int $articleId): bool
-    {
-        // TODO: Implement storeArticle() method.
-    }
 
     public function register(string $login, string $password): int
     {
@@ -53,6 +49,15 @@ class DbMySQL implements DbInterface
         $sql = "INSERT INTO users (login, password_hashed) VALUES (?,?)";
 
         return $this->pdo->prepare($sql)->execute([$login, $passwordHash]);
+    }
+
+    public function storeArticle(string $title, string $content, int $userId): bool
+    {
+        Log::debug(__METHOD__ . " has been started");
+
+        $sql = "INSERT INTO articles (title, content, user_id) VALUES (?,?,?)";
+
+        return $this->pdo->prepare($sql)->execute([$title, $content, $userId]);
     }
 
     public function login(string $login, string $password): int

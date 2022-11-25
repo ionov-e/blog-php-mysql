@@ -15,9 +15,11 @@ interface DbInterface
 
     public function getArticleById(int $articleId): array;
 
-    public function storeArticle(int $articleId): bool;
+    public function storeArticle(string $title, string $content, int $userId): bool;
 
     public function register(string $login, string $password): int;
 
     public function login(string $login, string $password): int;
+
+    public function getUserID(string $login): int;
 }

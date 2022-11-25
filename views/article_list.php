@@ -23,6 +23,8 @@
     </tbody>
 </table>
 
+<?php include_once __DIR__ . "/components/article-create-block.php" ?>
+
 <script>
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {

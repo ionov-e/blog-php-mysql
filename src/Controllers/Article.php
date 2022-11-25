@@ -42,10 +42,69 @@ class Article
         #TODO
     }
 
-    public function store()
+    public function store(): void
     {
         Log::init('artStore');
 
-        #TODO
+        try {
+            Log::info("Post-content: " . json_encode($_POST));
+
+            list($title, $content) = $this->getArticleFromPost();
+
+            $this->db->storeArticle($title, $content, $_SESSION[AUTHENTICATED_USER_ID]);
+
+            $this->listAll("Article with title '$title' has been stored!");
+        } catch (\UnexpectedValueException $e) {
+            Log::info("Invalid input: {$e->getMessage()}");
+            $this->listAll("Please correct your input, we've got an error: {$e->getMessage()}");
+        } catch (\Throwable $e) {
+            Log::error("Throwable: {$e->getMessage()}");
+            $this->listAll('Sorry, we have got an error processing your article. Article was not saved');
+        }
+
+    }
+
+    public function formForNew(): void
+    {
+        Log::init('formNewArt');
+
+        if (empty($_SESSION[AUTHENTICATED_USER_ID])) {
+            Log::info("Unauthenticated user tried to access new article form page");
+            $this->listAll('Log in to be able to create new article');
+        } else {
+            echo View::articleCreateFrom();
+        }
+
+        $articleId = $_GET[ARTICLE_ID_KEY_NAME];
+
+        Log::debug("Article ID received: $articleId");
+
+        $article = $this->db->getArticleById($articleId);
+
+        echo View::articleSingle($article);
+    }
+
+    /**
+     * @throws \UnexpectedValueException
+     * @return array
+     */
+    private function getArticleFromPost(): array
+    {
+        $title = $_POST[TITLE_KEY_NAME];
+        $content = $_POST[CONTENT_KEY_NAME];
+
+        if (strlen($title) > 60) {
+            throw new \UnexpectedValueException('Title is more than 60 symbols');
+        }
+
+        if (strlen($title) == 0) {
+            throw new \UnexpectedValueException('Title is empty');
+        }
+
+        if (strlen($content) == 0) {
+            throw new \UnexpectedValueException('Content is empty');
+        }
+
+        return [$title, $content];
     }
 }

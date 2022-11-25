@@ -11,6 +11,8 @@ use Monolog\Logger;
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($_GET[SEARCH_KEY_NAME])) {
         (new Controllers\Article(new DbMySQL()))->listFilteredByQuery();
+    } elseif (!empty($_GET[NEW_ARTICLE_KEY_NAME])) {
+        (new Controllers\Article(new DbMySQL()))->formForNew();
     } elseif (!empty($_GET[ARTICLE_ID_KEY_NAME])) {
         (new Controllers\Article(new DbMySQL()))->showById();
     } else {
