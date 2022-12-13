@@ -39,7 +39,16 @@ class Article
     {
         Log::init('artListQuery');
 
-        #TODO
+        try {
+            $query = $_GET[SEARCH_KEY_NAME];
+
+            $articles = $this->db->getArticlesByQuery($query);
+
+            echo View::articleList($articles, "For query '$query' found results: " . count($articles));
+        } catch (\Exception $e) {
+            Log::error("Exception: {$e->getMessage()}");
+            $this->listAll("There was an unexpected error while searching your query");
+        }
     }
 
     public function store(): void
@@ -85,8 +94,8 @@ class Article
     }
 
     /**
-     * @throws \UnexpectedValueException
      * @return array
+     * @throws \UnexpectedValueException
      */
     private function getArticleFromPost(): array
     {

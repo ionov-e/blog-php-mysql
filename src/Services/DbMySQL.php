@@ -28,7 +28,10 @@ class DbMySQL implements DbInterface
 
     public function getArticlesByQuery(string $query): array
     {
-        // TODO: Implement getArticlesByQuery() method.
+        $sql = "SELECT * FROM articles WHERE title LIKE CONCAT('%', :query, '%')";
+        $sth = $this->pdo->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        $sth->execute(['query' => $query]);
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getArticleById(int $articleId): array
